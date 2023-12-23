@@ -1,0 +1,13 @@
+{
+    "parent-dir": "../Homepage",
+    "vars": [
+        {
+            "replaceFrom": "/slides/{id}.json",
+            "replaceWith": "https://s.jothin.tech/{id}"
+        }
+    ],
+    "pages": [
+        "/index.html"
+    ],
+    "line-end": "\n"
+}
