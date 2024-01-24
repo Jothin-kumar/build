@@ -5,7 +5,7 @@ if os.path.exists("build-output"):
     shutil.rmtree("build-output")
 os.mkdir("build-output")
 
-with open("config.json") as d:
+with open("build-config.json") as d:
     config = json.loads(d.read())
 line_end = config["line-end"]
 
