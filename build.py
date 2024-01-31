@@ -38,7 +38,9 @@ for page in config["pages"]:
                     new_style.string += css_content.read() + "\n"
         soup.head.append(new_style)
     
-    with open(f"build-output/{page}", "w") as out:
+    filename = f"build-output/{page}"
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
+    with open(filename, "w") as out:
         result = str(soup)
         while "\n\n" in result:
             result = result.replace("\n\n", "\n")
