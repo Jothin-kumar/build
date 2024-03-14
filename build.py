@@ -1,4 +1,6 @@
 import shutil, os, json
+
+os.system("python3 -m pip install -r build/requirements.txt && echo 'build requirements installed'")
 from bs4 import BeautifulSoup
 
 if os.path.exists("build-output"):
