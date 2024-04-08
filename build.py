@@ -1,7 +1,7 @@
 import shutil, os, json
 
 os.system("python3 -m pip install -r build/requirements.txt && echo 'build requirements installed'")
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
 
 if os.path.exists("build-output"):
     shutil.rmtree("build-output")
@@ -18,15 +18,13 @@ for page in config["pages"]:
         soup = BeautifulSoup(html_content, "html.parser")
         path_parent = f"{config['parent-dir']}{page}"[::-1].partition("/")[2][::-1]
 
-        new_script = soup.new_tag("script")
-        new_script.string = "\n"
         for script in soup.find_all("script"):
             src = script.get("src")
             if src:
                 with open(f"{path_parent}/{src}") as js_content:
-                    script.decompose()
-                    new_script.string += js_content.read() + "\n"
-        soup.head.append(new_script)
+                    tag = Tag(soup, name="script")
+                    tag.string = js_content.read()
+                    script.replace_with(tag)
         
         new_style = soup.new_tag("style")
         new_style.string = "\n"
