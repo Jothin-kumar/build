@@ -27,7 +27,7 @@ for page in config["pages"]:
                     script.replace_with(tag)
         
         new_style = soup.new_tag("style")
-        new_style.string = "\n"
+        new_style.string = "\n* {-webkit-tap-highlight-color: transparent;}\n"
         for style in soup.find_all("link"):
             if "stylesheet" not in style.get("rel"):
                 continue
