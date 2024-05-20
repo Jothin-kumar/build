@@ -45,7 +45,7 @@ for page in config["pages"]:
                     new_style.string += f"/* */\n/* Source: {href} */\n{r.text}\n"
                 else:
                     with open(f"{path_parent}/{href}") as css_content:
-                        new_style.string += f"/* */\n/* Source: {href} */\n{css_content.read()}\n"
+                        new_style.string += f"/* */\n/* Source: {path_parent}/{href} */\n{css_content.read()}\n"
                 style.decompose()
         soup.head.append(new_style)
     
