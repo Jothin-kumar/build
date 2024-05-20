@@ -1,4 +1,4 @@
-import shutil, os, json
+import shutil, os, json, requests
 
 os.system("python3 -m pip install -r build/requirements.txt && echo 'build requirements installed'")
 from bs4 import BeautifulSoup, Tag
@@ -21,10 +21,15 @@ for page in config["pages"]:
         for script in soup.find_all("script"):
             src = script.get("src")
             if src:
-                with open(f"{path_parent}/{src}") as js_content:
-                    tag = Tag(soup, name="script")
-                    tag.string = js_content.read()
-                    script.replace_with(tag)
+                tag = Tag(soup, name="script")
+                if src.startswith("https://"):
+                    r = requests.get(src)
+                    assert r.status_code == 200
+                    tag.string = r.text
+                else:
+                    with open(f"{path_parent}/{src}") as js_content:
+                        tag.string = js_content.read()
+                script.replace_with(tag)
         
         new_style = soup.new_tag("style")
         new_style.string = "\n* {-webkit-tap-highlight-color: transparent; outline: none;} /* Inserted by build */\n"
@@ -33,9 +38,14 @@ for page in config["pages"]:
                 continue
             href = style.get("href")
             if href:
-                with open(f"{path_parent}/{href}") as css_content:
-                    style.decompose()
-                    new_style.string += css_content.read() + "\n"
+                if href.startswith("https://"):
+                    r = requests.get(href)
+                    assert r.status_code == 200
+                    new_style.string += r.text + "\n"
+                else:
+                    with open(f"{path_parent}/{href}") as css_content:
+                        new_style.string += css_content.read() + "\n"
+                style.decompose()
         soup.head.append(new_style)
     
     filename = f"build-output/{page}"
