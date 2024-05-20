@@ -26,12 +26,12 @@ for page in config["pages"]:
                 if src.startswith("https://"):
                     r = requests.get(src)
                     assert r.status_code == 200
-                    tag.string = r.text
+                    tag.string = f"\n// Source: {src}\n{r.text}\n"
                 else:
                     with open(f"{path_parent}/{src}") as js_content:
-                        tag.string = js_content.read()
+                        tag.string = f"\n// Source: {path_parent}/{src}\n{js_content.read()}\n"
                 script.replace_with(tag)
-        
+
         new_style = soup.new_tag("style")
         new_style.string = "\n* {-webkit-tap-highlight-color: transparent; outline: none;} /* Inserted by build */\n"
         for style in soup.find_all("link"):
@@ -42,10 +42,10 @@ for page in config["pages"]:
                 if href.startswith("https://"):
                     r = requests.get(href)
                     assert r.status_code == 200
-                    new_style.string += r.text + "\n"
+                    new_style.string += f"/* */\n/* Source: {href} */\n{r.text}\n"
                 else:
                     with open(f"{path_parent}/{href}") as css_content:
-                        new_style.string += css_content.read() + "\n"
+                        new_style.string += f"/* */\n/* Source: {href} */\n{css_content.read()}\n"
                 style.decompose()
         soup.head.append(new_style)
     
