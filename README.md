@@ -9,7 +9,11 @@
         }
     ],
     "pages": [
-        "/index.html"
+        "/test.html",
+        {
+            "path": "/index.html",
+            "prefetches": ["https://example.com/resource.txt", "..."]
+        }
     ],
     "line-end": "\n"
 }

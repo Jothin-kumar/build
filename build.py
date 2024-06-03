@@ -13,11 +13,23 @@ with open("build-config.json") as d:
 line_end = config["line-end"]
 
 for page in config["pages"]:
+    if type(page) == str:
+        page_path = page
+        page_prefetches = []
+    else:
+        page_path = page["path"]
+        page_prefetches = page["prefetches"]
 
     with open(f"{config['parent-dir']}/{page}") as html_file:
         html_content = html_file.read()
         soup = BeautifulSoup(html_content, "html.parser")
         path_parent = f"{config['parent-dir']}{page}"[::-1].partition("/")[2][::-1]
+
+        for prefetch in page_prefetches:
+            tag = Tag(soup, name="link")
+            tag["rel"] = "prefetch"
+            tag["href"] = prefetch
+            soup.head.append(tag)
 
         for script in soup.find_all("script"):
             src = script.get("src")
