@@ -27,10 +27,9 @@ for page in config["pages"]:
     path_parent = f"{config['parent-dir']}{page_path}"[::-1].partition("/")[2][::-1]
 
     for prefetch in page_prefetches:
-        tag = Tag(soup, name="link")
-        tag["rel"] = "prefetch"
-        tag["href"] = prefetch
-        soup.head.append(tag)
+        soup.head.append(BeautifulSoup(
+            f"<link rel='prefetch' href='{prefetch}'>\n",
+            "html.parser"))
 
     for script in soup.find_all("script"):
         src = script.get("src")
