@@ -42,8 +42,8 @@ for page in config["pages"]:
             else:
                 with open(f"{path_parent}/{src}") as js_content:
                     tag.string = f"\n// Source: {path_parent}/{src}\n{js_content.read()}\n"
-            if src.get("type"):
-                tag["type"] = src.get("type")
+            if script.get("type"):
+                tag["type"] = script.get("type")
             script.replace_with(tag)
 
     new_style = soup.new_tag("style")
