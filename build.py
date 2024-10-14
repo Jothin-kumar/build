@@ -13,6 +13,7 @@ with open("build-config.json") as d:
 line_end = config["line-end"]
 
 for page in config["pages"]:
+    print(f"Building {page}...")
     if type(page) == str:
         page_path = page
         page_prefetches = []
